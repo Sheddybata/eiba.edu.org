@@ -133,8 +133,8 @@ export async function deleteProgram(id: string) {
 
   const { error } = await supabase
     .from('programs')
-    .eq('id', id)
     .delete()
+    .eq('id', id)
 
   if (error) {
     throw new Error(`Failed to delete program: ${error.message}`)

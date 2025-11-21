@@ -138,8 +138,8 @@ export async function deleteCourse(id: string) {
 
   const { error } = await supabase
     .from('courses')
-    .eq('id', id)
     .delete()
+    .eq('id', id)
 
   if (error) {
     throw new Error(`Failed to delete course: ${error.message}`)

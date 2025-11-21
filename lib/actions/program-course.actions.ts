@@ -79,8 +79,8 @@ export async function unlinkCourseFromProgram(id: string, programId: string) {
 
   const { error } = await supabase
     .from('program_courses')
-    .eq('id', id)
     .delete()
+    .eq('id', id)
 
   if (error) {
     throw new Error(`Failed to unlink course: ${error.message}`)
