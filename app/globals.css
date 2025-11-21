@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 36 47% 97%;
+    --foreground: 230 28% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 230 28% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 230 28% 14%;
+    --primary: 356 68% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 64% 27%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 35 32% 90%;
+    --muted-foreground: 26 24% 36%;
+    --accent: 33 70% 56%;
+    --accent-foreground: 220 30% 18%;
+    --destructive: 0 74% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 27 40% 88%;
+    --input: 27 40% 88%;
+    --ring: 356 68% 45%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 229 40% 10%;
+    --foreground: 35 45% 94%;
+    --card: 229 40% 12%;
+    --card-foreground: 35 45% 94%;
+    --popover: 229 40% 12%;
+    --popover-foreground: 35 45% 94%;
+    --primary: 356 68% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 45% 22%;
+    --secondary-foreground: 35 45% 94%;
+    --muted: 215 32% 20%;
+    --muted-foreground: 33 30% 80%;
+    --accent: 33 60% 50%;
+    --accent-foreground: 229 40% 12%;
+    --destructive: 357 60% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 32% 25%;
+    --input: 215 32% 25%;
+    --ring: 356 68% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(225, 192, 142, 0.25), transparent 55%),
+      radial-gradient(circle at 80% 0%, rgba(193, 39, 45, 0.15), transparent 50%),
+      linear-gradient(180deg, rgba(18, 59, 122, 0.05), transparent 60%);
+  }
+}
+
