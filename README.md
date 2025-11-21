@@ -104,9 +104,30 @@ The application expects the following Supabase tables:
 ## Routes
 
 - `/` - Home page
+- `/login` - Login page (Student & Faculty)
+- `/apply` - Application page
+- `/programs` - Programs and enrollment information
 - `/admin` - Admin dashboard
 - `/admin/programs` - Manage programs
 - `/admin/programs/[id]` - Program details and course linking
 - `/admin/courses` - Manage courses
+- `/admin/students` - Student management
+- `/admin/announcements` - Manage announcements
+- `/admin/milestones` - Manage milestones
 - `/dashboard` - Student dashboard
+- `/profile` - Student profile and settings
+
+## Deployment
+
+### Vercel Deployment
+
+1. Push your code to GitHub
+2. Import your repository in [Vercel](https://vercel.com)
+3. Vercel will automatically detect Next.js and configure the build
+4. Add environment variables in Vercel dashboard:
+   - `NEXT_PUBLIC_SUPABASE_URL` (optional - app works with mock data)
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (optional - app works with mock data)
+5. Deploy!
+
+The application works with mock data if Supabase environment variables are not configured.
 

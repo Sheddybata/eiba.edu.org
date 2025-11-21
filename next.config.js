@@ -5,6 +5,15 @@ const nextConfig = {
       bodySizeLimit: '2mb',
     },
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.supabase.co',
+      },
+    ],
+    unoptimized: false,
+  },
 }
 
 module.exports = nextConfig
