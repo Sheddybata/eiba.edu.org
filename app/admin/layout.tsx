@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, BookOpen, GraduationCap, Bell, Target, Users } from 'lucide-react'
+import { LayoutDashboard, BookOpen, GraduationCap, Bell, Target, Users, FileText, FolderOpen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export default function AdminLayout({
@@ -42,6 +42,16 @@ export default function AdminLayout({
       title: 'Students',
       href: '/admin/students',
       icon: Users,
+    },
+    {
+      title: 'Applications',
+      href: '/admin/applications',
+      icon: FileText,
+    },
+    {
+      title: 'Curriculum',
+      href: '/admin/curriculum',
+      icon: FolderOpen,
     },
   ]
 

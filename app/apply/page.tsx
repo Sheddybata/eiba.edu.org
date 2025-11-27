@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,13 +9,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
-import { CheckCircle2, Calendar, Phone, Mail, Heart } from 'lucide-react'
-
-const programOptions = [
-  { id: 'diploma', label: 'Diploma in Theology' },
-  { id: 'certificate', label: 'Certificate in Pastoral Ministry' },
-  { id: 'bachelor', label: 'Bachelor of Christian Education' },
-]
+import { CheckCircle2, Calendar, Phone, Mail, Heart, AlertCircle } from 'lucide-react'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { submitApplication } from '@/lib/actions/application.actions'
+import { getPrograms } from '@/lib/actions/program.actions'
+import type { Program } from '@/types'
 
 const scheduleOptions = [
   'Full-time (residency)',
@@ -33,14 +31,76 @@ const references = [
 export default function ApplicationPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [programs, setPrograms] = useState<Array<{ id: string; title: string }>>([])
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  // Load programs on mount
+  useEffect(() => {
+    async function loadPrograms() {
+      try {
+        const progs = await getPrograms()
+        setPrograms(progs.map((p: Program) => ({ id: p.id, title: p.title })))
+      } catch (error) {
+        console.error('Failed to load programs:', error)
+        // Fallback to all 10 programs if API fails
+        setPrograms([
+          { id: '1', title: 'School of Biblical Foundations' },
+          { id: '2', title: 'School of Ministry & Fivefold Leadership' },
+          { id: '3', title: 'Kingdom Leadership & Governance Program' },
+          { id: '4', title: 'School of Prayer & Intercession' },
+          { id: '5', title: 'Christian Apologetics & Worldview Studies' },
+          { id: '6', title: 'Missions & Evangelism Academy' },
+          { id: '7', title: 'Christian Media, Communication & Digital Ministry Program' },
+          { id: '8', title: 'Youth Mentorship & Purpose Discovery Academy' },
+          { id: '9', title: 'School of Deliverance & Spiritual Warfare' },
+          { id: '10', title: 'Christian Entrepreneurship & Kingdom Innovation Program' },
+        ])
+      }
+    }
+    loadPrograms()
+  }, [])
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setIsSubmitting(true)
-    setTimeout(() => {
-      setIsSubmitting(false)
+    setError(null)
+
+    const formData = new FormData(event.currentTarget)
+    const selectedProgramId = formData.get('program') as string
+    const selectedProgram = programs.find((p) => p.id === selectedProgramId)
+
+    // Validate UUID format - only use program_id if it's a valid UUID
+    const isValidUUID = (str: string) => {
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+      return uuidRegex.test(str)
+    }
+
+    try {
+      await submitApplication({
+        full_name: formData.get('fullName') as string,
+        email: formData.get('email') as string,
+        phone: formData.get('phone') as string,
+        country: formData.get('country') as string,
+        program_id: selectedProgramId && isValidUUID(selectedProgramId) ? selectedProgramId : undefined,
+        program_title: selectedProgram?.title,
+        preferred_schedule: formData.get('schedule') as string,
+        desired_start_term: formData.get('start') as string || undefined,
+        payment_plan: formData.get('paymentPlan') as string || undefined,
+        testimony: formData.get('testimony') as string,
+        ministry_context: formData.get('ministry') as string || undefined,
+        reference_name: formData.get('refName') as string,
+        reference_relationship: formData.get('refRelationship') as string,
+        reference_email: formData.get('refEmail') as string,
+        reference_phone: formData.get('refPhone') as string || undefined,
+        reference_notes: formData.get('refNotes') as string || undefined,
+      })
+
       setSubmitted(true)
-    }, 1800)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to submit application. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -68,7 +128,7 @@ export default function ApplicationPage() {
           <div className="flex flex-wrap items-center gap-4 text-sm text-white/80">
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              Fall intake: Aug 12 • Deadline July 15
+              January intake: Jan 2025 • Applications close December 2024
             </div>
             <div className="flex items-center gap-2">
               <Phone className="h-4 w-4" />
@@ -83,26 +143,57 @@ export default function ApplicationPage() {
       </section>
 
       <div className="mx-auto flex max-w-5xl flex-col gap-10 px-6 py-12 md:py-16">
-        {submitted && (
-          <Card className="border border-primary/30 bg-primary/5">
-            <CardHeader className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+        {error && (
+          <Card className="border border-destructive/50 bg-destructive/5">
+            <CardHeader>
               <div className="flex items-center gap-3">
-                <CheckCircle2 className="h-6 w-6 text-primary" />
+                <AlertCircle className="h-6 w-6 text-destructive" />
                 <div>
-                  <CardTitle className="text-primary">Application received</CardTitle>
-                  <CardDescription>
-                    We’ll email within 48 hours with next steps. Expect a personal call from an admissions shepherd.
-                  </CardDescription>
+                  <CardTitle className="text-destructive">Submission Error</CardTitle>
+                  <CardDescription>{error}</CardDescription>
                 </div>
               </div>
-              <Button variant="outline" asChild>
-                <Link href="/">Return to home</Link>
-              </Button>
             </CardHeader>
           </Card>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-10">
+        {/* Success Dialog */}
+        <Dialog open={submitted} onOpenChange={(open) => !open && setSubmitted(false)}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <div className="flex items-center justify-center mb-4">
+                <div className="rounded-full bg-primary/10 p-3">
+                  <CheckCircle2 className="h-8 w-8 text-primary" />
+                </div>
+              </div>
+              <DialogTitle className="text-center text-2xl">Application Received!</DialogTitle>
+              <DialogDescription className="text-center text-base pt-2">
+                Thank you for your interest in EBOMI International Bible Academy. We've received your application and will review it carefully.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 pt-4">
+              <div className="rounded-lg bg-muted/50 p-4 space-y-2">
+                <p className="text-sm font-medium text-foreground">What happens next?</p>
+                <ul className="text-sm text-muted-foreground space-y-1.5 list-disc list-inside">
+                  <li>We'll email you within 48 hours with next steps</li>
+                  <li>Expect a personal call from an admissions shepherd</li>
+                  <li>Check your email for confirmation and further instructions</li>
+                </ul>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2 pt-2">
+                <Button className="flex-1" asChild>
+                  <Link href="/">Return to Home</Link>
+                </Button>
+                <Button variant="outline" className="flex-1" onClick={() => setSubmitted(false)}>
+                  Close
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {!submitted && (
+          <form onSubmit={handleSubmit} className="space-y-10">
           <div className="grid gap-6 md:grid-cols-2">
             <Card className="h-full">
               <CardHeader>
@@ -147,11 +238,27 @@ export default function ApplicationPage() {
                       <SelectValue placeholder="Select a program" />
                     </SelectTrigger>
                     <SelectContent>
-                      {programOptions.map((option) => (
-                        <SelectItem key={option.id} value={option.id}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
+                      {programs.length > 0 ? (
+                        programs.map((program) => (
+                          <SelectItem key={program.id} value={program.id}>
+                            {program.title}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        // Fallback: All 10 programs
+                        <>
+                          <SelectItem value="1">School of Biblical Foundations</SelectItem>
+                          <SelectItem value="2">School of Ministry & Fivefold Leadership</SelectItem>
+                          <SelectItem value="3">Kingdom Leadership & Governance Program</SelectItem>
+                          <SelectItem value="4">School of Prayer & Intercession</SelectItem>
+                          <SelectItem value="5">Christian Apologetics & Worldview Studies</SelectItem>
+                          <SelectItem value="6">Missions & Evangelism Academy</SelectItem>
+                          <SelectItem value="7">Christian Media, Communication & Digital Ministry Program</SelectItem>
+                          <SelectItem value="8">Youth Mentorship & Purpose Discovery Academy</SelectItem>
+                          <SelectItem value="9">School of Deliverance & Spiritual Warfare</SelectItem>
+                          <SelectItem value="10">Christian Entrepreneurship & Kingdom Innovation Program</SelectItem>
+                        </>
+                      )}
                     </SelectContent>
                   </Select>
                 </div>
@@ -172,7 +279,7 @@ export default function ApplicationPage() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="start">Desired Start Term</Label>
-                  <Input id="start" name="start" placeholder="Fall 2025" />
+                  <Input id="start" name="start" defaultValue="January 2025" placeholder="January 2025" />
                 </div>
                 <div className="grid gap-2">
                   <Label>Covenant Payment Interest</Label>
@@ -181,9 +288,8 @@ export default function ApplicationPage() {
                       <SelectValue placeholder="Select a plan" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="full">Pay-in-full (5% discount)</SelectItem>
-                      <SelectItem value="monthly">Monthly covenant plan</SelectItem>
-                      <SelectItem value="sponsor">Church sponsor / scholarship</SelectItem>
+                      <SelectItem value="full">Pay-in-full</SelectItem>
+                      <SelectItem value="scholarship">Scholarship</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -297,6 +403,7 @@ export default function ApplicationPage() {
             </Button>
           </div>
         </form>
+        )}
       </div>
     </div>
   )

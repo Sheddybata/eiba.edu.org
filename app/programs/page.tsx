@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -12,6 +13,7 @@ import {
   Handshake,
   Sparkles,
   Users,
+  ArrowRight,
 } from 'lucide-react'
 
 const journeySteps = [
@@ -74,13 +76,13 @@ const tracks = [
 const heroStats = [
   {
     label: 'Programs',
-    value: '3',
-    detail: 'Diploma • Certificate • Bachelor',
+    value: '10',
+    detail: '10 Specialized Schools',
     icon: GraduationCap,
   },
   {
     label: 'New Cohorts',
-    value: 'Aug 12',
+    value: 'Jan 2025',
     detail: 'Next intake kicks off',
     icon: Users,
   },
@@ -213,37 +215,120 @@ export default function ProgramsPage() {
         <section className="space-y-6">
           <div>
             <Badge variant="secondary">Programs</Badge>
-            <h2 className="mt-3 font-serif text-3xl text-secondary">Featured tracks</h2>
+            <h2 className="mt-3 font-serif text-3xl text-secondary">10 Specialized Schools</h2>
             <p className="text-muted-foreground">
-              Select the credential that best aligns with your ministry assignment and schedule.
+              Each school is designed to equip you for a specific calling. Choose the path that aligns with your God-given purpose.
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {tracks.map((track) => (
-              <Card key={track.name} className="border border-primary/10 bg-card/90 shadow-lg">
-                <CardHeader className="space-y-3">
-                  <CardTitle className="font-serif text-2xl text-secondary">{track.name}</CardTitle>
-                  <CardDescription className="text-sm">
-                    <span className="font-semibold text-primary">{track.duration}</span> • {track.mode}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-muted-foreground">{track.focus}</p>
-                  <div className="space-y-2">
-                    <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Sample modules</p>
-                    <div className="flex flex-wrap gap-2">
-                      {track.modules.map((module) => (
-                        <Badge key={module} variant="outline" className="border-primary/20 text-secondary">
-                          {module}
-                        </Badge>
-                      ))}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                title: 'School of Biblical Foundations',
+                description: 'A diploma program focused on essential doctrines, Bible interpretation, spiritual disciplines, and Christian ethics.',
+                level: 'Diploma',
+                price: '₦29,000',
+                image: '/programs/SchoolofBiblicalFoundations.png',
+              },
+              {
+                title: 'School of Ministry & Fivefold Leadership',
+                description: 'Training for pastors, teachers, prophets, evangelists, and apostles—equipping believers for effective ministry and service.',
+                level: 'Diploma',
+                price: '₦32,000',
+                image: '/programs/SchoolofMinistry&FivefoldLeadership.png',
+              },
+              {
+                title: 'Kingdom Leadership & Governance Program',
+                description: 'A leadership course preparing believers to influence politics, policy, and governance with integrity and biblical values.',
+                level: 'Certificate',
+                price: '₦11,000',
+                image: '/programs/KingdomLeadership&GovernanceProgram.png',
+              },
+              {
+                title: 'School of Prayer & Intercession',
+                description: 'A deep spiritual formation track on prophetic intercession, warfare prayer, and national transformation through prayer.',
+                level: 'Certificate',
+                price: '₦10,000',
+                image: '/programs/SchoolofPrayer&Intercession.png',
+              },
+              {
+                title: 'Christian Apologetics & Worldview Studies',
+                description: 'Equipping students to defend the faith, engage culture, and address societal issues with Scripture-based reasoning.',
+                level: 'Certificate',
+                price: '₦10,000',
+                image: '/programs/ChristianApologetics&WorldviewStudies.png',
+              },
+              {
+                title: 'Missions & Evangelism Academy',
+                description: 'Focused on cross-cultural missions, urban evangelism, digital evangelism, and humanitarian outreach skills.',
+                level: 'Certificate',
+                price: '₦10,000',
+                image: '/programs/Missions&EvangelismAcademy.png',
+              },
+              {
+                title: 'Christian Media, Communication & Digital Ministry Program',
+                description: 'Training in content creation, media ethics, storytelling, social media ministry, and church communications.',
+                level: 'Certificate',
+                price: '₦13,000',
+                image: '/programs/ChristianMedia,Communication&DigitalMinistryProgram.png',
+              },
+              {
+                title: 'Youth Mentorship & Purpose Discovery Academy',
+                description: 'A program helping young believers discover their calling, build character, and understand kingdom assignment early in life.',
+                level: 'Certificate',
+                price: '₦8,900',
+                image: '/programs/YouthMentorship&PurposeDiscoveryAcademy.png',
+              },
+              {
+                title: 'School of Deliverance & Spiritual Warfare',
+                description: 'Biblically grounded training on deliverance ministry, spiritual authority, and breaking strongholds responsibly and safely.',
+                level: 'Certificate',
+                price: '₦8,500',
+                image: '/programs/SchoolofDeliverance&Spiritual%20Warfare.png',
+              },
+              {
+                title: 'Christian Entrepreneurship & Kingdom Innovation Program',
+                description: 'Equipping believers to build businesses, nonprofits, and community-impact projects rooted in kingdom principles.',
+                level: 'Certificate',
+                price: '₦10,000',
+                image: '/programs/ChristianEntrepreneurship&KingdomInnovationProgram.png',
+              },
+            ].map((school, index) => (
+              <div
+                key={index}
+                className="group relative overflow-hidden rounded-2xl border border-white/30 shadow-2xl transition-all hover:scale-[1.02] hover:shadow-3xl"
+                style={{
+                  backgroundImage: `linear-gradient(135deg, rgba(8,22,48,0.60), rgba(139,25,30,0.50)), url("${encodeURI(school.image)}")`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                <div className="relative z-10 flex h-full flex-col justify-between bg-white/5 p-6">
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <Badge variant="outline" className="border-white/40 bg-white/20 text-white backdrop-blur-sm">
+                        {school.level}
+                      </Badge>
+                      <span className="text-xl font-bold text-white drop-shadow-lg">{school.price}</span>
                     </div>
+                    <h4 className="font-serif text-xl leading-tight text-white drop-shadow-md">
+                      {school.title}
+                    </h4>
+                    <p className="text-sm leading-relaxed text-white/90 drop-shadow-sm">
+                      {school.description}
+                    </p>
                   </div>
-                  <Button className="w-full" variant="outline" asChild>
-                    <Link href="/login">Enroll in {track.name}</Link>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="mt-4 w-full bg-white/95 text-primary hover:bg-white"
+                    asChild
+                  >
+                    <Link href="/apply">
+                      Apply Now <ArrowRight className="ml-2 h-3 w-3" />
+                    </Link>
                   </Button>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </section>

@@ -15,8 +15,8 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: "EIBA Portal",
-  description: "EIBA Portal - Educational Institution Management System",
+  title: "EBOMI International Bible Academy",
+  description: "Raising a generation of spiritually grounded, intellectually equipped, and purpose-driven leaders who will transform nations through the uncompromised truth of God's Word.",
 }
 
 export default function RootLayout({

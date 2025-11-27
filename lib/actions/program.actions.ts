@@ -7,6 +7,9 @@ import type { Program } from '@/types'
 export interface CreateProgramInput {
   title: string
   duration_years: number
+  level?: 'Certificate' | 'Diploma' | 'Degree'
+  mode?: 'Full-time' | 'Part-time' | 'Online' | 'Hybrid'
+  description?: string
 }
 
 export async function createProgram(input: CreateProgramInput) {
@@ -22,6 +25,9 @@ export async function createProgram(input: CreateProgramInput) {
       {
         title: input.title,
         duration_years: input.duration_years,
+        level: input.level,
+        mode: input.mode,
+        description: input.description,
       },
     ])
     .select()
@@ -110,6 +116,9 @@ export async function updateProgram(id: string, input: CreateProgramInput) {
     .update({
       title: input.title,
       duration_years: input.duration_years,
+      level: input.level,
+      mode: input.mode,
+      description: input.description,
     })
     .eq('id', id)
     .select()

@@ -25,26 +25,54 @@ A comprehensive educational institution management system built with Next.js 14,
 
 ## Getting Started
 
+### Frontend Setup (Works with Mock Data)
+
 1. Install dependencies:
 ```bash
 npm install
 ```
 
-2. Set up environment variables:
-```bash
-cp .env.local.example .env.local
-```
-
-Fill in your Supabase credentials in `.env.local`:
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-
-3. Run the development server:
+2. Run the development server:
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+The application works with mock data by default - no backend setup required for frontend development!
+
+### Backend Setup (For Production)
+
+To connect to Supabase:
+
+1. **Create a Supabase Project:**
+   - Go to [supabase.com](https://supabase.com) and create a new project
+   - Wait for the database to initialize
+
+2. **Set up environment variables:**
+   Create a `.env.local` file in the root directory:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your-project-url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   ```
+   Get these values from: Supabase Dashboard → Settings → API
+
+3. **Run Database Migrations:**
+   - Go to Supabase Dashboard → SQL Editor
+   - Run the SQL from `supabase/migrations/001_initial_schema.sql`
+   - This creates all required tables, indexes, and RLS policies
+
+4. **Enable Authentication:**
+   - Go to Supabase Dashboard → Authentication → Providers
+   - Enable Email provider
+   - Configure email templates if needed
+
+5. **Test the Connection:**
+   - Restart your dev server: `npm run dev`
+   - Try logging in (you'll need to create a user first)
+   - Check browser console for any errors
+
+📖 **See `AUDIT_REPORT.md` for detailed backend integration guide and roadmap.**
 
 ## Database Schema
 

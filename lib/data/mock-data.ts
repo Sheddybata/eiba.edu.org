@@ -312,22 +312,24 @@ export const mockCourseModules: CourseModule[] = [
     course_id: 'course-1',
     title: 'Module 1: Introduction to Old Testament',
     description: 'Foundational concepts and historical context',
-    order: 1,
+    display_order: 1,
     completed: true,
     resources: mockCourseResources.filter((r) => r.course_id === 'course-1'),
     videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    readingPages: [
+      readingPages: [
       {
         id: 'mod1-page1',
         title: 'Why Genesis Still Speaks',
         content:
           'Prophet Dr. Isa El-buba Sadiq unpacks how the opening chapters of Genesis reveal the nature of covenant love and provide a blueprint for ministry today.',
+        display_order: 1,
       },
       {
         id: 'mod1-page2',
         title: 'Formation Practices',
         content:
           'Practice lectio divina with Genesis 12 and journal how God calls Abram into mission. Use the reflection prompts to discern your own calling statements.',
+        display_order: 2,
       },
     ],
   },
@@ -336,7 +338,7 @@ export const mockCourseModules: CourseModule[] = [
     course_id: 'course-1',
     title: 'Module 2: The Pentateuch',
     description: 'Genesis through Deuteronomy',
-    order: 2,
+    display_order: 2,
     completed: false,
     resources: [],
     videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
@@ -346,12 +348,14 @@ export const mockCourseModules: CourseModule[] = [
         title: 'Walk with Moses',
         content:
           'Pastor Choice El-buba guides you through Exodus, highlighting leadership lessons, intercession, and obedience in the wilderness.',
+        display_order: 1,
       },
       {
         id: 'mod2-page2',
         title: 'Tabernacle Patterns',
         content:
           'Study the tabernacle blueprints and note how worship spaces today can mirror reverence, beauty, and accessibility for new believers.',
+        display_order: 2,
       },
     ],
   },
@@ -360,7 +364,7 @@ export const mockCourseModules: CourseModule[] = [
     course_id: 'course-1',
     title: 'Module 3: Historical Books',
     description: 'Joshua through 2 Kings',
-    order: 3,
+    display_order: 3,
     completed: false,
     resources: [],
     videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
@@ -369,13 +373,15 @@ export const mockCourseModules: CourseModule[] = [
         id: 'mod3-page1',
         title: 'Leadership Transitions',
         content:
-          'Prophet Dr. Isa challenges you to compare Joshua’s commissioning with your transition moments. What promises sustain your obedience?',
+          "Prophet Dr. Isa challenges you to compare Joshua's commissioning with your transition moments. What promises sustain your obedience?",
+        display_order: 1,
       },
       {
         id: 'mod3-page2',
         title: 'Prophetic Courage',
         content:
-          'Reflect on Elijah and Elisha’s persistence. Write a short prayer asking God for double portions to serve your city.',
+          "Reflect on Elijah and Elisha's persistence. Write a short prayer asking God for double portions to serve your city.",
+        display_order: 2,
       },
     ],
   },
@@ -538,7 +544,7 @@ export function getMockUnreadAnnouncementsCount(): number {
 export function getMockCourseModules(courseId: string): CourseModule[] {
   return mockCourseModules
     .filter((m) => m.course_id === courseId)
-    .sort((a, b) => a.order - b.order)
+    .sort((a, b) => a.display_order - b.display_order)
 }
 
 export function getMockCourseResources(courseId: string): CourseResource[] {

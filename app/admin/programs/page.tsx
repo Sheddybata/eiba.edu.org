@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -29,6 +29,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { mockPrograms, mockProgramCourses, mockCourses } from '@/lib/data/mock-data'
+import { getPrograms, createProgram, updateProgram, deleteProgram } from '@/lib/actions/program.actions'
 import type { Program } from '@/types'
 import { Pencil, Trash2, Plus, Search, ArrowRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -44,11 +45,29 @@ const programSchema = z.object({
 type ProgramFormValues = z.infer<typeof programSchema>
 
 export default function ProgramsPage() {
-  const [programs, setPrograms] = useState<Program[]>(mockPrograms)
+  const [programs, setPrograms] = useState<Program[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingProgram, setEditingProgram] = useState<Program | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
+
+  // Load programs from database
+  useEffect(() => {
+    async function loadPrograms() {
+      try {
+        const data = await getPrograms()
+        setPrograms(data)
+      } catch (error) {
+        console.error('Failed to load programs:', error)
+        // Fallback to mock data if database not available
+        setPrograms(mockPrograms)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadPrograms()
+  }, [])
 
   const {
     register,
@@ -94,39 +113,26 @@ export default function ProgramsPage() {
     )
   }, [programs, searchTerm])
 
-  function onSubmit(data: ProgramFormValues) {
-    if (editingProgram) {
-      // Update existing program
-      setPrograms((prev) =>
-        prev.map((p) =>
-          p.id === editingProgram.id
-            ? {
-                ...p,
-                title: data.title,
-                duration_years: data.duration_years,
-                level: data.level,
-                mode: data.mode,
-                description: data.description,
-              }
-            : p
+  async function onSubmit(data: ProgramFormValues) {
+    try {
+      if (editingProgram) {
+        // Update existing program
+        const updated = await updateProgram(editingProgram.id, data)
+        setPrograms((prev) =>
+          prev.map((p) => (p.id === editingProgram.id ? updated : p))
         )
-      )
-    } else {
-      // Create new program
-      const newProgram: Program = {
-        id: `program-${crypto.randomUUID()}`,
-        title: data.title,
-        duration_years: data.duration_years,
-        level: data.level,
-        mode: data.mode,
-        description: data.description,
-        created_at: new Date().toISOString(),
+      } else {
+        // Create new program
+        const newProgram = await createProgram(data)
+        setPrograms((prev) => [newProgram, ...prev])
       }
-      setPrograms((prev) => [newProgram, ...prev])
+      reset()
+      setEditingProgram(null)
+      setIsDialogOpen(false)
+    } catch (error) {
+      console.error('Failed to save program:', error)
+      alert('Failed to save program. Please check console for details.')
     }
-    reset()
-    setEditingProgram(null)
-    setIsDialogOpen(false)
   }
 
   function handleEdit(program: Program) {
@@ -139,9 +145,15 @@ export default function ProgramsPage() {
     setIsDialogOpen(true)
   }
 
-  function handleDelete(programId: string) {
+  async function handleDelete(programId: string) {
     if (!confirm('Remove this program from the catalog?')) return
-    setPrograms((prev) => prev.filter((program) => program.id !== programId))
+    try {
+      await deleteProgram(programId)
+      setPrograms((prev) => prev.filter((program) => program.id !== programId))
+    } catch (error) {
+      console.error('Failed to delete program:', error)
+      alert('Failed to delete program. Please check console for details.')
+    }
   }
 
   function handleDialogClose() {
@@ -157,6 +169,14 @@ export default function ProgramsPage() {
       courseCount,
     }
   })
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-muted-foreground">Loading programs...</p>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-8">

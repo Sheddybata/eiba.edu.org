@@ -87,7 +87,7 @@ export default function HomePage() {
               priority
             />
             <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-primary">Ebomi International Bible Academy</p>
+              <p className="text-xs uppercase tracking-[0.35em] text-primary">EBOMI International Bible Academy</p>
               <h1 className="font-serif text-3xl text-secondary">Love Is Everything</h1>
             </div>
           </div>
@@ -105,11 +105,13 @@ export default function HomePage() {
               Formation • Excellence • Missions
             </Badge>
             <h2 className="font-serif text-4xl leading-tight text-secondary md:text-5xl">
-              A bespoke learning sanctuary for Christian leaders, scholars, and creatives.
+              Raising a Generation of Spiritually Grounded, Intellectually Equipped Leaders
             </h2>
-            <p className="text-lg text-muted-foreground">
-              EBOMI Portal brings together the Word of God into course design, cohort care, and progress analytics in a
-              single sacred experience. Every interaction keeps our ethos at the center: Love is Everything.
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              To raise a generation of spiritually grounded, intellectually equipped, and purpose-driven leaders who will transform nations through the uncompromised truth of God's Word. We envision a Bible academy where believers are trained to understand Scripture deeply, walk in the power of the Holy Spirit, defend the faith with wisdom and boldness, and bring righteous influence into every sphere of society.
+            </p>
+            <p className="text-base text-primary font-medium">
+              Every interaction keeps our ethos at the center: <span className="font-serif italic">Love Is Everything</span>
             </p>
             <div className="flex flex-wrap gap-3">
               <Button size="lg" className="gap-2" asChild>
@@ -162,12 +164,143 @@ export default function HomePage() {
               <div className="rounded-2xl border border-secondary/20 p-4">
                 <p className="text-sm text-muted-foreground">Today&apos;s Benediction</p>
                 <p className="font-serif text-lg text-secondary">
-                  “By this all people will know that you are my disciples, if you have love for one another.”
+                  "By this all people will know that you are my disciples, if you have love for one another."
                 </p>
                 <p className="text-xs text-muted-foreground">John 13:35</p>
               </div>
             </CardContent>
           </Card>
+        </section>
+
+        {/* 10 Schools Section */}
+        <section className="space-y-8">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <Badge variant="secondary" className="w-fit bg-primary/10 text-primary">
+              Our Schools
+            </Badge>
+            <h3 className="font-serif text-3xl text-secondary md:text-4xl">10 Specialized Schools of Excellence</h3>
+            <p className="max-w-3xl text-muted-foreground">
+              Each school is designed to equip you for a specific calling. Choose the path that aligns with your God-given purpose.
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                title: 'School of Biblical Foundations',
+                description: 'A diploma program focused on essential doctrines, Bible interpretation, spiritual disciplines, and Christian ethics.',
+                level: 'Diploma',
+                price: '₦29,000',
+                image: '/programs/SchoolofBiblicalFoundations.png',
+              },
+              {
+                title: 'School of Ministry & Fivefold Leadership',
+                description: 'Training for pastors, teachers, prophets, evangelists, and apostles—equipping believers for effective ministry and service.',
+                level: 'Diploma',
+                price: '₦32,000',
+                image: '/programs/SchoolofMinistry&FivefoldLeadership.png',
+              },
+              {
+                title: 'Kingdom Leadership & Governance Program',
+                description: 'A leadership course preparing believers to influence politics, policy, and governance with integrity and biblical values.',
+                level: 'Certificate',
+                price: '₦11,000',
+                image: '/programs/KingdomLeadership&GovernanceProgram.png',
+              },
+              {
+                title: 'School of Prayer & Intercession',
+                description: 'A deep spiritual formation track on prophetic intercession, warfare prayer, and national transformation through prayer.',
+                level: 'Certificate',
+                price: '₦10,000',
+                image: '/programs/SchoolofPrayer&Intercession.png',
+              },
+              {
+                title: 'Christian Apologetics & Worldview Studies',
+                description: 'Equipping students to defend the faith, engage culture, and address societal issues with Scripture-based reasoning.',
+                level: 'Certificate',
+                price: '₦10,000',
+                image: '/programs/ChristianApologetics&WorldviewStudies.png',
+              },
+              {
+                title: 'Missions & Evangelism Academy',
+                description: 'Focused on cross-cultural missions, urban evangelism, digital evangelism, and humanitarian outreach skills.',
+                level: 'Certificate',
+                price: '₦10,000',
+                image: '/programs/Missions&EvangelismAcademy.png',
+              },
+              {
+                title: 'Christian Media, Communication & Digital Ministry Program',
+                description: 'Training in content creation, media ethics, storytelling, social media ministry, and church communications.',
+                level: 'Certificate',
+                price: '₦13,000',
+                image: '/programs/ChristianMedia,Communication&DigitalMinistryProgram.png',
+              },
+              {
+                title: 'Youth Mentorship & Purpose Discovery Academy',
+                description: 'A program helping young believers discover their calling, build character, and understand kingdom assignment early in life.',
+                level: 'Certificate',
+                price: '₦8,900',
+                image: '/programs/YouthMentorship&PurposeDiscoveryAcademy.png',
+              },
+              {
+                title: 'School of Deliverance & Spiritual Warfare',
+                description: 'Biblically grounded training on deliverance ministry, spiritual authority, and breaking strongholds responsibly and safely.',
+                level: 'Certificate',
+                price: '₦8,500',
+                image: '/programs/SchoolofDeliverance&Spiritual%20Warfare.png',
+              },
+              {
+                title: 'Christian Entrepreneurship & Kingdom Innovation Program',
+                description: 'Equipping believers to build businesses, nonprofits, and community-impact projects rooted in kingdom principles.',
+                level: 'Certificate',
+                price: '₦10,000',
+                image: '/programs/ChristianEntrepreneurship&KingdomInnovationProgram.png',
+              },
+            ].map((school, index) => (
+              <div
+                key={index}
+                className="group relative overflow-hidden rounded-2xl border border-white/30 shadow-2xl transition-all hover:scale-[1.02] hover:shadow-3xl"
+                style={{
+                  backgroundImage: `linear-gradient(135deg, rgba(8,22,48,0.60), rgba(139,25,30,0.50)), url("${encodeURI(school.image)}")`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                <div className="relative z-10 flex h-full flex-col justify-between bg-white/5 p-6">
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <Badge variant="outline" className="border-white/40 bg-white/20 text-white backdrop-blur-sm">
+                        {school.level}
+                      </Badge>
+                      <span className="text-xl font-bold text-white drop-shadow-lg">{school.price}</span>
+                    </div>
+                    <h4 className="font-serif text-xl leading-tight text-white drop-shadow-md">
+                      {school.title}
+                    </h4>
+                    <p className="text-sm leading-relaxed text-white/90 drop-shadow-sm">
+                      {school.description}
+                    </p>
+                  </div>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="mt-4 w-full bg-white/95 text-primary hover:bg-white"
+                    asChild
+                  >
+                    <Link href="/apply">
+                      Apply Now <ArrowRight className="ml-2 h-3 w-3" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-center pt-4">
+            <Button size="lg" variant="outline" className="border-primary/30 text-primary hover:bg-primary/10" asChild>
+              <Link href="/programs">
+                Programs & Enrollment <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </section>
 
         {/* Highlights */}
@@ -281,8 +414,8 @@ export default function HomePage() {
             <div className="space-y-6 rounded-3xl border border-white/30 bg-white/10 p-8 text-white backdrop-blur-xl">
               <p className="text-sm uppercase tracking-[0.3em] text-white/70">Enrollment window</p>
               <div className="space-y-3">
-                <p className="text-5xl font-serif">Fall 2025</p>
-                <p className="text-white/80">Applications close July 15 • Cohorts launch August 12</p>
+                <p className="text-5xl font-serif">January 2025</p>
+                <p className="text-white/80">Applications close December 2024 • Cohorts launch January 2025</p>
               </div>
               <div className="space-y-3 text-sm text-white/90">
                 <p>What you&apos;ll receive:</p>

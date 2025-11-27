@@ -93,6 +93,7 @@ export interface ModuleReadingPage {
   id: string
   title: string
   content: string
+  display_order: number
 }
 
 export interface CourseModule {
@@ -100,7 +101,7 @@ export interface CourseModule {
   course_id: string
   title: string
   description: string
-  order: number
+  display_order: number
   completed: boolean
   resources: CourseResource[]
   videoUrl?: string
@@ -159,5 +160,46 @@ export interface SupportService {
   booking_url?: string
   available: boolean
   category: 'advising' | 'counseling' | 'chaplaincy' | 'tech' | 'academic'
+}
+
+export interface Application {
+  id: string
+  full_name: string
+  email: string
+  phone: string
+  country: string
+  program_id: string | null
+  program_title?: string
+  preferred_schedule: string
+  desired_start_term?: string
+  payment_plan?: string
+  testimony: string
+  ministry_context?: string
+  reference_name: string
+  reference_relationship: string
+  reference_email: string
+  reference_phone?: string
+  reference_notes?: string
+  status: 'pending' | 'reviewing' | 'approved' | 'rejected' | 'waitlisted'
+  reviewed_by?: string
+  reviewed_at?: string
+  admin_notes?: string
+  created_at: string
+  updated_at: string
+}
+
+export interface CurriculumDocument {
+  id: string
+  title: string
+  description?: string
+  file_path: string
+  file_url: string
+  file_type: string
+  file_size: number
+  program_id?: string
+  course_id?: string
+  category: 'syllabus' | 'curriculum' | 'handbook' | 'guide' | 'template' | 'other'
+  uploaded_by: string
+  created_at: string
 }
 

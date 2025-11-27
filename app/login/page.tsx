@@ -3,21 +3,44 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
-import { Sparkles, ShieldCheck, ArrowRight } from 'lucide-react'
-
-const roleToRoute: Record<'student' | 'faculty', string> = {
-  student: '/dashboard',
-  faculty: '/admin/courses',
-}
+import { Sparkles, ShieldCheck, ArrowRight, AlertCircle } from 'lucide-react'
+import { signIn } from '@/lib/actions/auth.actions'
 
 export default function LoginPage() {
   const [role, setRole] = useState<'student' | 'faculty'>('student')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      await signIn({ email, password })
+      // Redirect based on role
+      if (role === 'faculty') {
+        router.push('/admin')
+      } else {
+        router.push('/dashboard')
+      }
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed. Please check your credentials.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">
@@ -87,14 +110,35 @@ export default function LoginPage() {
               </TabsContent>
             </Tabs>
 
-            <form className="space-y-4">
+            {error && (
+              <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 flex items-center gap-2 text-sm text-destructive">
+                <AlertCircle className="h-4 w-4" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email address</Label>
-                <Input id="email" type="email" placeholder="you@ebomi.edu" required />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="admin@ebomi.edu" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required 
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" placeholder="••••••••" required />
+                <Input 
+                  id="password" 
+                  type="password" 
+                  placeholder="••••••••" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required 
+                />
               </div>
               <div className="flex items-center justify-between text-sm text-muted-foreground">
                 <label className="flex items-center gap-2">
@@ -105,10 +149,14 @@ export default function LoginPage() {
                   Forgot password?
                 </Link>
               </div>
-              <Button className="w-full" asChild>
-                <Link href={roleToRoute[role]}>
-                  Continue as {role.charAt(0).toUpperCase() + role.slice(1)} <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
+                  'Signing in...'
+                ) : (
+                  <>
+                    Continue as {role.charAt(0).toUpperCase() + role.slice(1)} <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
               </Button>
             </form>
 
